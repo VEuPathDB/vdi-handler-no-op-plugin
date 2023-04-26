@@ -24,9 +24,13 @@ verifyEnv "DB_NAME" "$DB_NAME" || exit $EXIT_CODE_UNEXPECTED_ERROR
 verifyEnv "DB_USER" "$DB_USER" || exit $EXIT_CODE_UNEXPECTED_ERROR
 verifyEnv "DB_PASS" "$DB_PASS" || exit $EXIT_CODE_UNEXPECTED_ERROR
 
-#
-# Script Body
-#
+if [ -z "FAIL_META_UNEXPECTED" ]; then
+  exit $EXIT_CODE_UNEXPECTED_ERROR
+elif [ -z "FAIL_META_VALIDATION"]; then
+  exit $EXIT_CODE_VALIDATION_ERROR
+else
+  logMessage "Warning"
+fi
 
 >&2 env
 # TODO: Do the meta installation!

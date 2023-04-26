@@ -24,9 +24,15 @@ verifyEnv "DB_NAME" "$DB_NAME" || exit $EXIT_CODE_UNEXPECTED_ERROR
 verifyEnv "DB_USER" "$DB_USER" || exit $EXIT_CODE_UNEXPECTED_ERROR
 verifyEnv "DB_PASS" "$DB_PASS" || exit $EXIT_CODE_UNEXPECTED_ERROR
 
-#
-# Script Body
-#
+for file in "${INPUT_DIR}"/*; do
+  if [file -n "FAIL_INSTALL_UNEXPECTED"]; then
+    exit EXIT_CODE_UNEXPECTED_ERROR
+  elif [file -n "FAIL_INSTALL_VALIDATION"]; then
+    exit EXIT_CODE_VALIDATION_ERROR
+  else
+    logMessage "Would install ${file} into target db ${DB_NAME}"
+  fi
+done
 
 >&2 env
 # TODO: Call some commands and do the things needed to install a dataset.

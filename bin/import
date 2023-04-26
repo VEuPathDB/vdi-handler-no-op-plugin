@@ -30,11 +30,15 @@ verifyDir "${OUTPUT_DIR}" || exit $EXIT_CODE_UNEXPECTED_ERROR
 # Script Body
 #
 
-logMessage "Here's a log message that will be printed to STDERR"
-
+# Intermittent failure signals? Maybe just a json config file that defines the failure injection properties.
 for file in "${INPUT_DIR}"/*; do
+  if [file -n "FAIL_IMPORT_UNEXPECTED"]; then
+    exit EXIT_CODE_UNEXPECTED_ERROR
+  elif [file -n "FAIL_IMPORT_VALIDATION"]; then
+    exit EXIT_CODE_VALIDATION_ERROR
+  elif [file -n "WARN_IMPORT"]; then
+    printWarning "Here's a validation warning about ${file} that will be printed to STDOUT"
+  fi
   logMessage "Copying ${file} to ${OUTPUT_DIR}"
-  printWarning "Here's a validation warning about ${file} that will be printed to STDOUT"
-  # validate "$file" || exit $EXIT_CODE_VALIDATION_ERROR
   cp "${file}" "${OUTPUT_DIR}"
 done
